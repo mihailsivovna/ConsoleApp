@@ -38,5 +38,6 @@ namespace ConsoleApp
             registration.Click();
 
         }
+
     }
 }
