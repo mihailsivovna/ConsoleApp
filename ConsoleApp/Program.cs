@@ -1,41 +1,48 @@
-﻿using OpenQA.Selenium;
+﻿using Automation.App;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        
+
+        public static void Main(string[] args)
         {
 
-
-            
-
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-notifications");
+            IWebDriver driver = new ChromeDriver(options);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             driver.Manage().Window.Maximize();
-            driver.Navigate().GoToUrl("https://www.instagram.com/");
-            Console.WriteLine(driver.Title);
-            
 
-            IWebElement Phone = driver.FindElement(By.Name("emailOrPhone"));
-            Phone.SendKeys("mihailsivovna12@gmail.com");
+            LoginPage login = new LoginPage(driver);
+            login.Open();
+            login.EnterLogin("");
+            login.EnterPassword("");
+            login.Login();
 
-            IWebElement Name = driver.FindElement(By.Name("fullName"));
-            Name.SendKeys("Михаил Сивовна");
+            HomePage profile = new HomePage(driver);
+            profile.ClickProfile();
+            profile.ClickFriend();
+            profile.ChooseFriend();
 
-            IWebElement UserName = driver.FindElement(By.Name("username"));
-            UserName.SendKeys("mihail_sivovna");
+            Thread.Sleep(2000);
+            ChoosePhoto photo = new ChoosePhoto(driver);
+            Thread.Sleep(2000);
+            photo.ChoosePhotos();
+            Thread.Sleep(2000);
+            photo.LikePhotos();
+            Thread.Sleep(2000);
 
-            IWebElement Password = driver.FindElement(By.Name("password"));
-            Password.SendKeys("mihail2018");
-
-            IWebElement registration = driver.FindElement(By.CssSelector("button[type=submit]"));
-            registration.Click();
+            driver.Quit();
 
         }
 
